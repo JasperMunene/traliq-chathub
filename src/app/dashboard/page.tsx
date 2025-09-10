@@ -8,32 +8,32 @@ export default function DashboardPage() {
     const stats = [
         {
             title: "Active Chats",
-            value: "2,847",
-            change: "+12%",
+            value: "0",
+            change: "0",
             trend: "up",
             icon: MessageSquare,
             description: "Total conversations this month"
         },
         {
             title: "Users Online",
-            value: "1,234",
-            change: "+5%",
+            value: "0",
+            change: "0",
             trend: "up",
             icon: Users,
             description: "Currently active users"
         },
         {
             title: "AI Responses",
-            value: "15,672",
-            change: "+23%",
+            value: "0",
+            change: "0",
             trend: "up",
             icon: Bot,
             description: "AI-generated responses today"
         },
         {
             title: "Response Time",
-            value: "0.8s",
-            change: "-15%",
+            value: "0",
+            change: "0",
             trend: "down",
             icon: Clock,
             description: "Average response time"
