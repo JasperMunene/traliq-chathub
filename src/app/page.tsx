@@ -1,103 +1,219 @@
-import Image from "next/image";
+"use client"
+
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { useAuth } from "@/contexts/auth-context"
+import { Button } from "@/components/ui/button"
+import { Loader2, MessageCircle, Brain, Zap, ArrowRight, Sparkles, Bot } from "lucide-react"
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { isAuthenticated, isLoading } = useAuth()
+  const router = useRouter()
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [isVisible, setIsVisible] = useState(false)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      router.push('/dashboard')
+    }
+  }, [isAuthenticated, isLoading, router])
+
+  useEffect(() => {
+    setIsVisible(true)
+
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY })
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
+
+  if (isLoading) {
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center">
+          <div className="text-center space-y-6">
+            <div className="relative">
+              <Loader2 className="h-12 w-12 animate-spin mx-auto text-white" />
+              <div className="absolute inset-0 h-12 w-12 border-2 border-white/20 rounded-full animate-pulse"></div>
+            </div>
+            <p className="text-gray-400 text-lg">Initializing AI...</p>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+    )
+  }
+
+  return (
+      <div className="min-h-screen bg-black text-white overflow-hidden relative">
+        {/* Animated Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black">
+          <div
+              className="absolute inset-0 opacity-30"
+              style={{
+                background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(255,255,255,0.1) 0%, transparent 50%)`
+              }}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+          {/* Floating Particles */}
+          <div className="absolute inset-0">
+            {[...Array(20)].map((_, i) => (
+                <div
+                    key={i}
+                    className="absolute w-1 h-1 bg-white rounded-full opacity-20 animate-pulse"
+                    style={{
+                      left: `${Math.random() * 100}%`,
+                      top: `${Math.random() * 100}%`,
+                      animationDelay: `${Math.random() * 3}s`,
+                      animationDuration: `${2 + Math.random() * 3}s`
+                    }}
+                />
+            ))}
+          </div>
+        </div>
+
+        <div className={`relative z-10 min-h-screen flex items-center justify-center p-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="max-w-6xl mx-auto text-center space-y-16">
+            {/* Logo and Brand */}
+            <div className={`space-y-6 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+              <div className="relative">
+                <div className="text-5xl md:text-6xl font-thin tracking-wider text-white">
+                  Traliq
+                  <span className="font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">.ai</span>
+                </div>
+                <div className="absolute -top-4 -right-4">
+                  <Sparkles className="w-8 h-8 text-white animate-pulse" />
+                </div>
+              </div>
+              <div className="text-lg text-gray-400 tracking-[0.3em] uppercase font-light">
+                Next-Gen AI Conversations
+              </div>
+            </div>
+
+            {/* Hero Section */}
+            <div className={`space-y-8 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+              <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+                <span className="block text-white mb-4">Revolutionize</span>
+                <span className="block bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent">
+                Customer Engagement
+              </span>
+              </h1>
+              <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
+                Deploy intelligent AI agents that understand, learn, and respond with human-like precision.
+                Transform every conversation into an opportunity.
+              </p>
+            </div>
+
+            {/* CTA Section */}
+            <div className={`space-y-8 transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <Button
+                    asChild
+                    size="lg"
+                    className="group h-16 px-12 font-medium bg-white text-black hover:bg-gray-100 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                >
+                  <Link href="/auth/signup" className="flex items-center gap-3">
+                    Launch Your AI
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </Button>
+                <Button
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className="group h-16 px-12 font-medium border-white/30 text-white hover:bg-white transition-all duration-300 hover:scale-105"
+                >
+                  <Link href="/auth/login" className="flex items-center gap-3">
+                    <Bot className="w-5 h-5" />
+                    Sign In
+                  </Link>
+                </Button>
+              </div>
+              <div className=" text-xs text-gray-500">
+              <span className="px-3 py-1 border border-gray-800 rounded-full">
+                ✨ No credit card required • Start in 30 seconds
+              </span>
+              </div>
+            </div>
+
+            {/* Enhanced Features Grid */}
+            <div className={`grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 transition-all duration-1000 delay-900 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+              <div className="group relative p-8 bg-gradient-to-b from-gray-900/50 to-black/50 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-gray-600 transition-all duration-500 hover:scale-105 hover:bg-gray-900/70">
+                <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative space-y-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-white/20 to-white/10 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                    <Brain className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">
+                    Neural Processing
+                  </h3>
+                  <p className="text-gray-400 text-sm leading-relaxed">
+                    Advanced AI models that understand context, emotion, and intent with unprecedented accuracy.
+                  </p>
+                </div>
+              </div>
+
+              <div className="group relative p-8 bg-gradient-to-b from-gray-900/50 to-black/50 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-gray-600 transition-all duration-500 hover:scale-105 hover:bg-gray-900/70">
+                <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative space-y-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-white/20 to-white/10 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                    <MessageCircle className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">
+                    Conversational AI
+                  </h3>
+                  <p className="text-gray-400 text-sm leading-relaxed">
+                    Natural, flowing conversations that adapt to your customers&apos; communication style and preferences.
+                  </p>
+                </div>
+              </div>
+
+              <div className="group relative p-8 bg-gradient-to-b from-gray-900/50 to-black/50 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-gray-600 transition-all duration-500 hover:scale-105 hover:bg-gray-900/70">
+                <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative space-y-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-white/20 to-white/10 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                    <Zap className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">
+                    Lightning Fast
+                  </h3>
+                  <p className="text-gray-400 text-sm leading-relaxed">
+                    Instant responses powered by optimized infrastructure. Your customers never wait.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Stats Section */}
+            <div className={`grid grid-cols-1 md:grid-cols-3 gap-8 py-16 border-t border-b border-gray-800 transition-all duration-1000 delay-1100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+              <div className="text-center space-y-2">
+                <div className="text-3xl md:text-4xl font-bold text-white">99.9%</div>
+                <div className="text-gray-400 text-lg">Uptime Guarantee</div>
+              </div>
+              <div className="text-center space-y-2">
+                <div className="text-3xl md:text-4xl font-bold text-white">&lt;100ms</div>
+                <div className="text-gray-400 text-lg">Average Response</div>
+              </div>
+              <div className="text-center space-y-2">
+                <div className="text-3xl md:text-4xl font-bold text-white">24/7</div>
+                <div className="text-gray-400 text-lg">AI Support</div>
+              </div>
+            </div>
+
+            {/* Enhanced Footer */}
+            <div className={`pt-12 transition-all duration-1000 delay-1300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+              <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+                <p className="text-sm text-gray-500">
+                  © 2025 Traliq.ai • Pioneering the future of AI communication
+                </p>
+                <div className="flex items-center gap-6 text-sm text-gray-500">
+                  <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+                  <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
+                  <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  )
 }
