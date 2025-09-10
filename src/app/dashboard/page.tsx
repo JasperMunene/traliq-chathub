@@ -1,7 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { MessageSquare, Users, Bot, TrendingUp, Plus, Settings, Activity, Clock, FileText, Plug } from "lucide-react"
+import { MessageSquare, Users, Bot, Plus, Settings, Activity, Clock, FileText, Plug } from "lucide-react"
+import Link from 'next/link'
 
 export default function DashboardPage() {
     const stats = [
@@ -159,23 +160,34 @@ export default function DashboardPage() {
                             Common tasks and shortcuts
                         </CardDescription>
                     </CardHeader>
+
                     <CardContent className="space-y-3">
-                        <Button variant="outline" className="w-full justify-start gap-3 h-12">
-                            <FileText className="h-4 w-4" />
-                            Upload Documents
-                        </Button>
-                        <Button variant="outline" className="w-full justify-start gap-3 h-12">
-                            <Bot className="h-4 w-4" />
-                            Customize Chatbot
-                        </Button>
-                        <Button variant="outline" className="w-full justify-start gap-3 h-12">
-                            <Plug className="h-4 w-4" />
-                            Add Integrations
-                        </Button>
-                        <Button variant="outline" className="w-full justify-start gap-3 h-12">
-                            <TrendingUp className="h-4 w-4" />
-                            View Analytics
-                        </Button>
+                        <Link href="/dashboard/documents" passHref>
+                            <Button asChild variant="outline" className="w-full justify-start gap-3 h-12">
+                              <span className="flex items-center gap-3">
+                                <FileText className="h-4 w-4" />
+                                Upload Documents
+                              </span>
+                            </Button>
+                        </Link>
+
+                        <Link href="/dashboard/bot" passHref>
+                            <Button asChild variant="outline" className="w-full justify-start gap-3 h-12">
+      <span className="flex items-center gap-3">
+        <Bot className="h-4 w-4" />
+        Customize Chatbot
+      </span>
+                            </Button>
+                        </Link>
+
+                        <Link href="/dashboard/integrations" passHref>
+                            <Button asChild variant="outline" className="w-full justify-start gap-3 h-12">
+      <span className="flex items-center gap-3">
+        <Plug className="h-4 w-4" />
+        Add Integrations
+      </span>
+                            </Button>
+                        </Link>
                     </CardContent>
                 </Card>
             </div>
